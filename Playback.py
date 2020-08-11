@@ -15,9 +15,13 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 
 data = wf.readframes(CHUNK)
 
-while data != '':
-    stream.write(data)
-    data = wf.readframes(CHUNK)
+while True:
+    if data != '':
+        stream.write(data)
+        data = wf.readframes(CHUNK)
+
+    if data == b'':
+        break
 
 stream.stop_stream()
 stream.close()
