@@ -5,7 +5,6 @@ import itertools
 from scipy import interpolate
 from operator import itemgetter
 
-# https://davywybiral.blogspot.com/2010/09/procedural-music-with-pyaudio-and-numpy.html
 
 class Note:
 
@@ -61,61 +60,63 @@ class Scale:
   def transpose(self, note, interval):
     return self.get(self.index(note) + interval)
 
+class NotePlayer():
 
-def sine(frequency, length, rate):
-  length = int(length * rate)
-  factor = float(frequency) * (math.pi * 2) / rate
-  return numpy.sin(numpy.arange(length) * factor)
+  def sine(self, frequency, length, rate):
+    length = int(length * rate)
+    factor = float(frequency) * (math.pi * 2) / rate
+    return numpy.sin(numpy.arange(length) * factor)
 
-def shape(data, points, kind='slinear'):
-    items = points.items()
-    sorted(items,key=itemgetter(0))
-    keys = list(map(itemgetter(0), items))
-    vals = list(map(itemgetter(1), items))
-    interp = interpolate.interp1d(keys, vals, kind=kind)
-    factor = 1.0 / len(data)
-    shape = interp(numpy.arange(len(data)) * factor)
-    return data * shape
+  def shape(self, data, points, kind='slinear'):
+      items = points.items()
+      sorted(items,key=itemgetter(0))
+      keys = list(map(itemgetter(0), items))
+      vals = list(map(itemgetter(1), items))
+      interp = interpolate.interp1d(keys, vals, kind=kind)
+      factor = 1.0 / len(data)
+      shape = interp(numpy.arange(len(data)) * factor)
+      return data * shape
 
-def harmonics1(freq, length):
-  a = sine(freq * 1.00, length, 44100)
-  b = sine(freq * 2.00, length, 44100) * 0.5
-  c = sine(freq * 4.00, length, 44100) * 0.125
-  return (a + b + c) * 0.2
+  def harmonics1(self, freq, length):
+    a = self.sine(freq * 1.00, length, 44100)
+    b = self.sine(freq * 2.00, length, 44100) * 0.5
+    c = self.sine(freq * 4.00, length, 44100) * 0.125
+    return (a + b + c) * 0.2
 
-def harmonics2(freq, length):
-  a = sine(freq * 1.00, length, 44100)
-  b = sine(freq * 2.00, length, 44100) * 0.5
-  return (a + b) * 0.2
+  def harmonics2(self, freq, length):
+    a = self.sine(freq * 1.00, length, 44100)
+    b = self.sine(freq * 2.00, length, 44100) * 0.5
+    return (a + b) * 0.2
 
-def pluck1(note, length=1):
-  chunk = harmonics1(note.frequency(), length)
-  return shape(chunk, {0.0: 0.0, 0.005: 1.0, 0.25: 0.5, 0.9: 0.1, 1.0:0.0})
+  def pluck1(self, note, length=1):
+    chunk = self.harmonics1(note.frequency(), length)
+    return self.shape(chunk, {0.0: 0.0, 0.005: 1.0, 0.25: 0.5, 0.9: 0.1, 1.0:0.0})
 
-def pluck2(note, length=1):
-  chunk = harmonics2(note.frequency(), length)
-  return shape(chunk, {0.0: 0.0, 0.5:0.75, 0.8:0.4, 1.0:0.1})
+  def pluck2(self, note, length=1):
+    chunk = self.harmonics2(note.frequency(), length)
+    return self.shape(chunk, {0.0: 0.0, 0.5:0.75, 0.8:0.4, 1.0:0.1})
 
-def chord(n, scale):
-  root = scale.get(n)
-  third = scale.transpose(root, 2)
-  fifth = scale.transpose(root, 4)
-  return pluck1(root) + pluck1(third) + pluck1(fifth)
+  def chord(self, n, scale):
+    root = scale.get(n)
+    third = scale.transpose(root, 2)
+    fifth = scale.transpose(root, 4)
+    return self.pluck1(root) + self.pluck1(third) + self.pluck1(fifth)
 
-root = Note('A', 3)
-scale = Scale(root, [2, 1, 2, 2, 1, 3, 1])
 
-chunks = []
-chunks.append(pluck1(scale.get(21),0.5))
-chunks.append(pluck1(scale.get(23),0.5))
-chunks.append(pluck1(scale.get(25),0.5))
-chunks.append(chord(21, scale))
-# chunks.append(pluck1(scale.get(21))+ pluck1(scale.get(23)) + pluck1(scale.get(25)))
+  def __init__(self):
+    root = Note('A', 3)
+    scale = Scale(root, [2, 1, 2, 2, 1, 3, 1])
 
-chunk = numpy.concatenate(chunks) * 0.25
+    chunks = []
+    chunks.append(self.pluck1(scale.get(21),0.5))
+    chunks.append(self.pluck1(scale.get(23),0.5))
+    chunks.append(self.pluck1(scale.get(25),0.5))
+    chunks.append(self.chord(21, scale))
 
-p = pyaudio.PyAudio()
-stream = p.open(format=pyaudio.paFloat32, channels=1, rate=44100, output=1)
-stream.write(chunk.astype(numpy.float32).tostring())
-stream.close()
-p.terminate()
+    chunk = numpy.concatenate(chunks) * 0.25
+
+    p = pyaudio.PyAudio()
+    stream = p.open(format=pyaudio.paFloat32, channels=1, rate=44100, output=1)
+    stream.write(chunk.astype(numpy.float32).tostring())
+    stream.close()
+    p.terminate()
