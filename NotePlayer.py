@@ -109,7 +109,8 @@ chunks = []
 chunks.append(pluck1(scale.get(21),0.5))
 chunks.append(pluck1(scale.get(23),0.5))
 chunks.append(pluck1(scale.get(25),0.5))
-chunks.append(pluck1(scale.get(21))+ pluck1(scale.get(23)) + pluck1(scale.get(25)))
+chunks.append(chord(21, scale))
+# chunks.append(pluck1(scale.get(21))+ pluck1(scale.get(23)) + pluck1(scale.get(25)))
 
 chunk = numpy.concatenate(chunks) * 0.25
 
