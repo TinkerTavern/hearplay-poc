@@ -206,60 +206,48 @@ class NotePlayer:
         fifth = scale.transpose(root, 4)
         return self.pluckNumber(root) + self.pluckNumber(third) + self.pluckNumber(fifth)
 
-    def round1(self):
+    def round(self, roundNo):
         chunks = []
-        chunks.append(self.pluckNote("C4", 0.75))
-        chunks.append(self.pluckNote("C4", 0.75))
-        chunks.append(self.pluckNote("C4", 1))
-        self.play(chunks)
-
-    def round2(self):
-        chunks = []
-        chunks.append(self.pluckNote("C4", 0.3))
-        chunks.append(self.pluckNote("D4", 0.3))
-        chunks.append(self.pluckNote("E4", 0.3))
-        chunks.append(self.pluckNote("F4", 0.3))
-        chunks.append(self.pluckNote("G4", 0.5))
-        self.play(chunks)
-
-    def round3(self):
-        chunks = []
-        chunks.append(self.pluckNote("A3", 0.5))
-        chunks.append(self.pluckNote("C4", 0.5))
-        chunks.append(self.pluckNote("E4", 0.5))
-        chunks.append(self.pluckNote("Null", 0.1))
-        chunks.append(self.pluckNote("A3") + self.pluckNote("C4") + self.pluckNote("E4"))
-        self.play(chunks)
-
-    # A#7 F#6
-    def round4(self):
-        chunks = []
-        chunks.append(self.pluckNote("A♯5", 0.4) + self.pluckNote("F♯4", 0.4))
-        chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
-        chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
-        chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
-        chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
-        chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
-        chunks.append(self.pluckNote("C♯4", 0.4) + self.pluckNote("F♯5", 0.4))
-        chunks.append(self.pluckNote("C♯4", 0.4) + self.pluckNote("F♯5", 0.4))
-        chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
-        self.play(chunks)
-
-    def round5(self):
-        chunks = []
-        chunks.append(self.pluckNote("E4", 0.4))
-        chunks.append(self.pluckNote("D4", 0.4))
-        chunks.append(self.pluckNote("C4", 0.4))
-        chunks.append(self.pluckNote("D4", 0.4))
-        chunks.append(self.pluckNote("E4", 0.4))
-        chunks.append(self.pluckNote("E4", 0.4))
-        chunks.append(self.pluckNote("E4"))
-        chunks.append(self.pluckNote("D4", 0.4))
-        chunks.append(self.pluckNote("D4", 0.4))
-        chunks.append(self.pluckNote("D4"))
-        chunks.append(self.pluckNote("E4", 0.4))
-        chunks.append(self.pluckNote("G4", 0.4))
-        chunks.append(self.pluckNote("G4"))
+        if roundNo == 1:
+            chunks.append(self.pluckNote("C4", 0.75))
+            chunks.append(self.pluckNote("C4", 0.75))
+            chunks.append(self.pluckNote("C4", 1))
+        elif roundNo == 2:
+            chunks.append(self.pluckNote("C4", 0.3))
+            chunks.append(self.pluckNote("D4", 0.3))
+            chunks.append(self.pluckNote("E4", 0.3))
+            chunks.append(self.pluckNote("F4", 0.3))
+            chunks.append(self.pluckNote("G4", 0.5))
+        elif roundNo == 3:
+            chunks.append(self.pluckNote("A3", 0.5))
+            chunks.append(self.pluckNote("C4", 0.5))
+            chunks.append(self.pluckNote("E4", 0.5))
+            chunks.append(self.pluckNote("Null", 0.1))
+            chunks.append(self.pluckNote("A3") + self.pluckNote("C4") + self.pluckNote("E4"))
+        elif roundNo == 4:
+            chunks.append(self.pluckNote("A♯5", 0.4) + self.pluckNote("F♯4", 0.4))
+            chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
+            chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
+            chunks.append(self.pluckNote("A♯5", 0.2) + self.pluckNote("F♯4", 0.2))
+            chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
+            chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
+            chunks.append(self.pluckNote("C♯4", 0.4) + self.pluckNote("F♯5", 0.4))
+            chunks.append(self.pluckNote("C♯4", 0.4) + self.pluckNote("F♯5", 0.4))
+            chunks.append(self.pluckNote("D♯4", 0.4) + self.pluckNote("G♯5", 0.4))
+        else:
+            chunks.append(self.pluckNote("E4", 0.4))
+            chunks.append(self.pluckNote("D4", 0.4))
+            chunks.append(self.pluckNote("C4", 0.4))
+            chunks.append(self.pluckNote("D4", 0.4))
+            chunks.append(self.pluckNote("E4", 0.4))
+            chunks.append(self.pluckNote("E4", 0.4))
+            chunks.append(self.pluckNote("E4"))
+            chunks.append(self.pluckNote("D4", 0.4))
+            chunks.append(self.pluckNote("D4", 0.4))
+            chunks.append(self.pluckNote("D4"))
+            chunks.append(self.pluckNote("E4", 0.4))
+            chunks.append(self.pluckNote("G4", 0.4))
+            chunks.append(self.pluckNote("G4"))
         self.play(chunks)
 
     def play(self, chunks):
