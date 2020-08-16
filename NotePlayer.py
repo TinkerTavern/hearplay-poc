@@ -272,3 +272,10 @@ class NotePlayer:
         stream.close()
         p.terminate()
         time.sleep(1)
+
+    def soundTest(self):
+        self.round1()
+        self.round2()
+        self.round3()
+        self.round4()
+        self.round5()
