@@ -5,8 +5,9 @@ import sys
 class NotePlayback():
 
     def __init__(self):
-        CHUNK = 1024
+        self.__CHUNK = 1024
 
+    def playBack(self):
         wf = wave.open("file.wav", 'rb')
 
         p = pyaudio.PyAudio()
@@ -16,12 +17,12 @@ class NotePlayback():
                         rate=wf.getframerate(),
                         output=True)
 
-        data = wf.readframes(CHUNK)
+        data = wf.readframes(self.__CHUNK)
 
         while True:
             if data != '':
                 stream.write(data)
-                data = wf.readframes(CHUNK)
+                data = wf.readframes(self.__CHUNK)
 
             if data == b'':
                 break
